@@ -224,31 +224,22 @@ class _MembershipExchangesPageState extends State<MembershipExchangesPage> with 
         const SizedBox(height: 8),
         Text((_entitlement?['active'] == true) ? '${t('معتبر تا', 'Valid until')}: ${_entitlement?['expires_at'] ?? '—'}' : t('حساب فعلی روی سطح رایگان است. فقط entitlement تأییدشدهٔ سرور دسترسی ویژه را فعال می‌کند.', 'Your account is on the free tier. Only a server-verified entitlement enables paid features.'), style: Theme.of(context).textTheme.bodySmall),
       ])),
-      const SizedBox(height: 16),
-      Text(t('طرح‌ها', 'Plans'), style: Theme.of(context).textTheme.titleLarge),
-      const SizedBox(height: 10),
-      ...planItems.map((plan) {
-        final tierValue = plan['tier'] as String? ?? 'free';
-        final benefits = (plan['benefits'] as List?)?.whereType<String>().toList() ?? [];
-        return Container(margin: const EdgeInsets.only(bottom: 12), padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(18), border: Border.all(color: tierValue == tier ? const Color(0x8838BDF8) : const Color(0xFF263241))), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [Expanded(child: Text(tierValue == 'free' ? t('رایگان', 'Free') : tierValue == 'pro' ? 'PRO' : 'PREMIUM', style: Theme.of(context).textTheme.titleLarge)), if (tierValue == tier) const Icon(Icons.verified_rounded, color: AppTheme.positive)]),
-          const SizedBox(height: 8),
-          ...benefits.map((benefit) => Padding(padding: const EdgeInsets.only(bottom: 5), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [const Icon(Icons.check_rounded, size: 17, color: AppTheme.positive), const SizedBox(width: 7), Expanded(child: Text(benefit, style: Theme.of(context).textTheme.bodySmall))]))),
-          if (tierValue != 'free') ...[
-            const SizedBox(height: 10),
-            if (_demoBillingEnabled) ...[
-              Row(children: [
-                Expanded(child: Text(t('حالت آزمایشی · بدون پرداخت واقعی', 'DEMO MODE · No real payment'), style: const TextStyle(fontWeight: FontWeight.w800, color: AppTheme.accent))),
-                const SizedBox(width: 8),
-                FilledButton(onPressed: _loading ? null : () => _activateDemoSubscription(tierValue), child: Text(t('فعال‌سازی دمو', 'Activate demo'))),
-              ]),
-              const SizedBox(height: 5),
-              Text(t('دسترسی آزمایشی به‌مدت ۳۰ روز فعال می‌شود. این عملیات هیچ پولی دریافت نمی‌کند.', 'Test access lasts 30 days. This action does not collect any money.'), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.muted)),
-            ] else
-              Text(t('پرداخت واقعی در این نسخهٔ اپ فعال نشده است. حالت بک‌اند را روی demo نگه دار.', 'Real store billing is not wired into this app build. Keep the backend mode set to demo.'), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.muted)),
-          ],
-        ]));
-      }),
+     SizedBox(
+  width: double.infinity,
+  child: FilledButton.icon(
+    onPressed: _connecting ? null : _connectExchange,
+    icon: _connecting
+        ? const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+        : const Icon(Icons.link_rounded),
+    label: Text(
+      t('اعتبارسنجی و اتصال امن', 'Validate and connect securely'),
+    ),
+  ),
+),
       const SizedBox(height: 10),
       Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: const Color(0x2238BDF8), borderRadius: BorderRadius.circular(12)), child: Text(_demoBillingEnabled
           ? t('پرداخت در حالت DEMO است؛ Google Play و درگاه پرداخت غیرفعال‌اند. دسترسی آزمایشی فقط از سرور اعطا می‌شود و پس از ۳۰ روز منقضی می‌شود.', 'Billing is in DEMO mode; Google Play and payment processing are disabled. Demo access is granted by the server and expires after 30 days.')
