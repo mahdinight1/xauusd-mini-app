@@ -79,7 +79,7 @@ class _AuthPageState extends State<AuthPage> {
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(22), border: Border.all(color: const Color(0xFF263747))),
                   child: Column(children: [
-                    const Icon(Icons.shield_lock_rounded, size: 44, color: AppTheme.accent),
+                    const Icon(Icons.verified_user_rounded, size: 44, color: AppTheme.accent),
                     const SizedBox(height: 10),
                     Text(_register ? t('ساخت حساب امن', 'Create a secure account') : t('ورود امن', 'Secure sign in'), style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
                     const SizedBox(height: 7),
